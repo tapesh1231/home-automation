@@ -30,20 +30,27 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         remember = True if request.form.get('remember') else False
+        print(email, password, remember)
 
         # Fetch user from DB using email
         user = User.query.filter_by(email=email).first()
+        print(user)
         
         # Verify password
         if not user or not check_password_hash(user.password, password):
             flash('Please check your login details and try again.', 'danger')
+            print('Invalid login attempt pasword wrong.') 
             return redirect(url_for('auth.login'))
+        
 
         # Valid login → create session
         login_user(user, remember=remember)
+        flash('Login successful!', 'success')
+        print('Login successful!')
         return redirect(url_for('main.dashboard'))
     
     # GET request → show login form
+    print('Login form displayed.')
     return render_template('login.html')
 
 # ──────────────────────────────────────────────────────
@@ -83,9 +90,12 @@ def register():
         db.session.commit()
 
         flash('Account created successfully! Please log in.', 'success')
+        print('Account created successfully! Please log in.')
         return redirect(url_for('auth.login'))
 
     # GET request → show register form
+    flash('Account not  created successfully! Please retry.', 'unsuccess')
+    print('Account not created successfully! Please retry.')
     return render_template('register.html')
 
 # ──────────────────────────────────────────────────────
