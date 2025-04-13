@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ✅ Sets the character encoding and viewport for responsive layout -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ✅ Page title; overridable by child templates using Jinja block -->
+    <title>{% block title %}Home Automation{% endblock %}</title>
+
+    <!-- ✅ Bootstrap CSS for responsive layout and components -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ✅ Link to custom stylesheet from Flask's /static/ folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- 🔷 Navbar for site navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+
+            <!-- 🔗 Brand name, navigates to home page -->
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">HomeAuto</a>
+
+            <!-- 📱 Button for collapsing nav on small screens -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- 🔽 Collapsible navigation links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- 🔗 Left side nav links -->
+                <ul class="navbar-nav me-auto">
+                    <!-- 🏠 Home link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
+                    </li>
+
+                    <!-- 👤 Dashboard link (only shown when user is logged in) -->
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- 🔗 Right side nav: Auth links -->
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                        <!-- 👋 Welcome message -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Welcome, {{ current_user.username }}</a>
+                        </li>
+
+                        <!-- 🔓 Logout link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <!-- 🔐 Login/Register links (shown only when not logged in) -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🧱 Main content container -->
+    <div class="container mt-4">
+
+        <!-- ⚠️ Flash message display (e.g., login errors, success messages) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- 🧩 Page-specific content rendered here from child templates -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- 🚀 Bootstrap JavaScript for interactive components -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 🛠️ Link to custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- 🔄 Optional additional scripts can be injected by child templates -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

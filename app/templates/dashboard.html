@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+        Add Device
+    </button>
+</div>
+
+<div class="row" id="devices-container">
+    {% for device in devices %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ device.name }}</h5>
+                <p class="card-text">
+                    Type: {{ device.device_type }}<br>
+                    Status: <span class="device-status" data-id="{{ device.id }}">{{ 'On' if device.status else 'Off' }}</span>
+                </p>
+                <div class="form-check form-switch">
+                    <input class="form-check-input device-toggle" type="checkbox" data-id="{{ device.id }}" 
+                           id="device-{{ device.id }}" {% if device.status %}checked{% endif %}>
+                    <label class="form-check-label" for="device-{{ device.id }}">Toggle</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Add Device Modal -->
+<div class="modal fade" id="addDeviceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Device</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addDeviceForm">
+                    <div class="mb-3">
+                        <label for="deviceName" class="form-label">Device Name</label>
+                        <input type="text" class="form-control" id="deviceName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceType" class="form-label">Device Type</label>
+                        <select class="form-select" id="deviceType" required>
+                            <option value="light">Light</option>
+                            <option value="thermostat">Thermostat</option>
+                            <option value="lock">Lock</option>
+                            <option value="camera">Camera</option>
+                            <option value="sensor">Sensor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceId" class="form-label">Device ID</label>
+                        <input type="text" class="form-control" id="deviceId" placeholder="e.g., AP1001" required>
+                      </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveDevice">Save Device</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

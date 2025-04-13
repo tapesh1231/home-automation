@@ -1,0 +1,71 @@
+{% extends "base.html" %}  {# 🧱 Inherit layout and styles from base.html #}
+
+{% block content %}  {# 🔁 This section will be inserted into base.html's content block #}
+
+<!-- 🎉 Welcome Section (Hero / Jumbotron) -->
+<div class="jumbotron text-center bg-light p-5 mb-4 rounded-3">
+    <h1 class="display-4">Welcome to Home Automation</h1>
+    <p class="lead">Control your smart home devices from anywhere</p>
+    <hr class="my-4">
+    <p>Secure, reliable, and easy to use home automation system</p>
+
+    {% if not current_user.is_authenticated %}
+    <!-- 🔐 Show buttons only if user is NOT logged in -->
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <!-- 🔗 Register button -->
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4 gap-3">Get Started</a>
+
+        <!-- 🔗 Login button -->
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 🧩 Feature Highlights (3-card layout) -->
+<div class="row">
+
+    <!-- 💡 Lighting Control Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-lightbulb"></i> Lighting Control
+                </h5>
+                <p class="card-text">
+                    Control your home lighting remotely with just a tap.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌡️ Climate Control Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-thermometer"></i> Climate Control
+                </h5>
+                <p class="card-text">
+                    Manage your thermostat and keep your home comfortable.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 Security Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-shield-lock"></i> Security
+                </h5>
+                <p class="card-text">
+                    Monitor your home security cameras and alarms.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
