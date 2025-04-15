@@ -1,25 +1,15 @@
 import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Explicitly load .env file
+load_dotenv(Path(__file__).parent/'.env')
 
 class Config:
-    # Security
-    SECRET_KEY = os.environ['SECRET_KEY']#.get('SECRET_KEY', 'your-secret-key-here')  # Fallback if not set in the environment
-    SECURITY_PASSWORD_SALT = os.environ['SECURITY_PASSWORD_SALT']#.get('SECURITY_PASSWORD_SALT', 'another-secret')  # Fallback salt
-    
-    # Database
-    SQLALCHEMY_DATABASE_URI = os.environ['internal_url']#.get('DATABASE_URL', 'sqlite:///site.db')  # Fallback if not set
+    # Use getenv() instead of direct dictionary access
+    SECRET_KEY = os.getenv('SECRET_KEY')  # No more KeyError risk
+    SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT')
+    SQLALCHEMY_DATABASE_URI = os.getenv('internal_url')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # Session
-    if os.environ.get('FLASK_ENV') == 'production':
-        SESSION_COOKIE_SECURE = True  # Requires HTTPS in production
-        REMEMBER_COOKIE_SECURE = True
-    else:
-        SESSION_COOKIE_SECURE = False  # Disable for development without HTTPS
-        REMEMBER_COOKIE_SECURE = False
-    
-    # Flask-Login
-    SESSION_PROTECTION = 'strong'
-    
-    # Application
-    FLASK_ENV = os.environ.get('FLASK_ENV', 'production')  # Default to production if not set
-    FLASK_DEBUG = os.environ.get('FLASK_DEBUG', False)  # Default to False if not set
+    FLASK_ENV = os.getenv('FLASK_ENV', 'production')
+    FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')

@@ -26,7 +26,7 @@ class Device(db.Model):
     name = db.Column(db.String(100), nullable=False)
     device_type = db.Column(db.String(50), nullable=False)
     device_id = db.Column(db.String(32), unique=True, nullable=False)
-    secret_key = db.Column(db.String(128), nullable=False)
+    secret_key = db.Column(db.String(600), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
     relay_states = db.Column(db.JSON, default={

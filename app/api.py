@@ -327,12 +327,19 @@ def add_device():
         print('Device ID already exists')
         return jsonify({'error': 'Device ID already exists'}), 400
     
+    print(f"name: {len(data['name'])}")
+    print(f"type: {len(data['type'])}")
+    print(f"device_id: {len(data['device_id'])}")
+    print(f"secret_key: {len(data['secret_key'])}")
+    
     new_device = Device(
         name=data['name'],
         device_type=data['type'],
         device_id=data['device_id'],
         secret_key=generate_password_hash(data['secret_key']),
         user_id=current_user.id,
+       
+
         
         relay_states={
             'relay_1': False,
