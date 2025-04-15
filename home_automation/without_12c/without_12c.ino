@@ -8,9 +8,9 @@ const char* ssid = "JIET@JOD";
 const char* password = "2912868152";
 
 // Server details
-#define SERVER "http://192.168.24.82:5000"
-#define DEVICE_ID "AP0011"
-#define SECRET_KEY "Tapesh@123"
+#define SERVER "https://apnavision.in"
+#define DEVICE_ID "AP1111"
+#define SECRET_KEY "Tapesh1234"
 
 // Relay pins (adjust according to your wiring)
 const int relayPins[] = {5, 4, 0, 2, 14, 12, 13, 15};
@@ -65,8 +65,14 @@ void syncRelayStates() {
   Serial.printf("Requesting: %s\n", url.c_str());
   
   HTTPClient http;
-  http.begin(client, url);  // Updated API usage
+  WiFiClientSecure client;  // Use WiFiClientSecure for HTTPS
+  http.begin(client, url);  // Start the HTTP request
+  client.setInsecure();     // Disable SSL verification (for development only)
+
   http.addHeader("Authorization", "Bearer " + String(SECRET_KEY));
+  Serial.printf("Sending Authorization: Bearer %s\n", SECRET_KEY);
+
+
   
   int httpCode = http.GET();
   
