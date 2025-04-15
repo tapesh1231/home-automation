@@ -8,27 +8,25 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     devices = db.relationship('Device', backref='owner', lazy=True)
 
-# class Device(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), nullable=False)
-#     device_type = db.Column(db.String(50), nullable=False)
-#     status = db.Column(db.Boolean, default=False)
-#     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
-#     device_id = db.Column(db.String(20), unique=True, nullable=False)
-
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Validate lengths before save
+        if len(self.username) > 50:
+            raise ValueError("Username too long")
+        if len(self.email) > 120:
+            raise ValueError("Email too long")
 
 class Device(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     device_type = db.Column(db.String(50), nullable=False)
-    device_id = db.Column(db.String(32), unique=True, nullable=False)  # e.g. "AP001"
-    secret_key = db.Column(db.String(128), nullable=False)  # Hashed secret
+    device_id = db.Column(db.String(32), unique=True, nullable=False)
+    secret_key = db.Column(db.String(128), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
     relay_states = db.Column(db.JSON, default={
@@ -41,5 +39,3 @@ class Device(db.Model):
         'relay_7': False,
         'relay_8': False
     })
-    
-   # user = db.relationship('User', backref='devices')

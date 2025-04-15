@@ -2,11 +2,11 @@ import os
 
 class Config:
     # Security
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')  # Fallback if not set in the environment
-    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', 'another-secret')  # Fallback salt
+    SECRET_KEY = os.environ['SECRET_KEY']#.get('SECRET_KEY', 'your-secret-key-here')  # Fallback if not set in the environment
+    SECURITY_PASSWORD_SALT = os.environ['SECURITY_PASSWORD_SALT']#.get('SECURITY_PASSWORD_SALT', 'another-secret')  # Fallback salt
     
     # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///site.db')  # Fallback if not set
+    SQLALCHEMY_DATABASE_URI = os.environ['internal_url']#.get('DATABASE_URL', 'sqlite:///site.db')  # Fallback if not set
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Session
